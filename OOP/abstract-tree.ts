@@ -7,10 +7,12 @@ interface AbstractTreeInterface {
 }
 
 export abstract class AbstractTree implements AbstractTreeInterface {
-  protected root: Node
+  protected root: Node | null
+  protected data: number[]
 
-  constructor(data: Node) {
-    this.root = data
+  constructor(data: number[]) {
+    this.root = null
+    this.data = data
   }
 
   protected sortArray(array: number[]) {
@@ -34,7 +36,7 @@ export abstract class AbstractTree implements AbstractTreeInterface {
     return this.removeDuplicate(sortedArray)
   }
 
-  getRoot() {
+  public getRoot() {
     if (!this.root) return null
 
     return this.root
