@@ -1,8 +1,8 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { BalancedBinaryTree } from "./OOP/tree.ts"
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
-}
+const arr = [1, 6, 4, 5, 9, 8, 3, 3, 7]
+
+const bst = new BalancedBinaryTree(arr)
+console.log(bst.buildTree())
+const root = bst.getRoot()
+if (root) bst.prettyPrint(root)

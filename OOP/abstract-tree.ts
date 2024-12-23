@@ -8,11 +8,11 @@ interface AbstractTreeInterface {
 
 export abstract class AbstractTree implements AbstractTreeInterface {
   protected root: Node | null
-  protected data: number[]
+  protected preparedArray: number[]
 
-  constructor(data: number[]) {
+  constructor(array: number[]) {
     this.root = null
-    this.data = data
+    this.preparedArray = this.prepareArray(array)
   }
 
   protected sortArray(array: number[]) {
