@@ -3,6 +3,7 @@ import { Node } from "./node.ts"
 
 interface BinaryTreeInterface {
   prettyPrint: (node: Node, prefix: string, isLeft: boolean) => void
+  insertValue: (value: number) => Node | null
 }
 
 export class BalancedBinaryTree
@@ -11,6 +12,7 @@ export class BalancedBinaryTree
 {
   constructor(data: number[]) {
     super(data)
+    this.buildTree()
   }
 
   override buildTree(
@@ -51,5 +53,18 @@ export class BalancedBinaryTree
     if (node.left !== null) {
       this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true)
     }
+  }
+
+  public insertValue(value: number, currentRoot = this.root) {
+    if (!value) return this.root
+    if (!currentRoot) return new Node(value)
+
+    if (value < currentRoot.data) {
+      currentRoot.left = this.insertValue(value, currentRoot.left)
+    } else if (value > currentRoot.data) {
+      currentRoot.right = this.insertValue(value, currentRoot.right)
+    }
+
+    return currentRoot
   }
 }

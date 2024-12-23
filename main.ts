@@ -6,3 +6,9 @@ const bst = new BalancedBinaryTree(arr)
 console.log(bst.buildTree())
 const root = bst.getRoot()
 if (root) bst.prettyPrint(root)
+
+bst.insertValue(33)
+bst.prettyPrint(root!)
+
+bst.insertValue(3)
+bst.prettyPrint(root!)
