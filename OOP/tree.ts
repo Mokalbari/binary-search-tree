@@ -7,6 +7,7 @@ interface BinaryTreeInterface {
   // delete: (value: number, currentRoot: Node) => Node | null
   find: (value: number) => Node | null
   levelOrderTraversal: (method: "recursion" | "iteration") => number[]
+  depthFirstTraversal: (order: "pre" | "in" | "post") => number[]
 }
 
 export class BalancedBinaryTree
@@ -136,5 +137,40 @@ export class BalancedBinaryTree
     return method === "iteration"
       ? this.#levelOrderTraversalIterative(queue, output)
       : this.#levelOrderTraversalRecursivly(queue, output)
+  }
+
+  #traverse(
+    order: "pre" | "in" | "post",
+    root: Node | null,
+    output: number[] = []
+  ): number[] {
+    if (!root) return output
+
+    switch (order) {
+      case "pre":
+        output.push(root.data)
+        this.#traverse(order, root.left, output)
+        this.#traverse(order, root.right, output)
+        break
+
+      case "in":
+        this.#traverse(order, root.left, output)
+        output.push(root.data)
+        this.#traverse(order, root.right, output)
+        break
+
+      case "post":
+        this.#traverse(order, root.left, output)
+        this.#traverse(order, root.right, output)
+        output.push(root.data)
+        break
+    }
+
+    return output
+  }
+  public depthFirstTraversal(order: "pre" | "in" | "post") {
+    if (!this.root) return []
+    const output: number[] = []
+    return this.#traverse(order, this.root!, output)
   }
 }
