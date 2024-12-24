@@ -6,6 +6,7 @@ interface BinaryTreeInterface {
   insert: (value: number, currentRoot: Node) => Node | null
   // delete: (value: number, currentRoot: Node) => Node | null
   find: (value: number) => Node | null
+  levelOrderTraversal: (method: "recursion" | "iteration") => number[]
 }
 
 export class BalancedBinaryTree
@@ -78,5 +79,62 @@ export class BalancedBinaryTree
     }
 
     return null
+  }
+
+  #levelOrderTraversalRecursivly(queue: Node[], output: number[]): number[] {
+    if (!this.root) return output
+    queue.push(this.root)
+
+    function traverseLevel() {
+      if (queue.length === 0) return // base case
+
+      const levelSize = queue.length
+      for (let i = 0; i < levelSize; i++) {
+        const currentNode = queue.shift()!
+        output.push(currentNode.data)
+
+        if (currentNode.left) {
+          queue.push(currentNode.left)
+        }
+        if (currentNode.right) {
+          queue.push(currentNode.right)
+        }
+      }
+
+      traverseLevel()
+    }
+
+    traverseLevel()
+    return output
+  }
+
+  #levelOrderTraversalIterative(queue: Node[], output: number[]): number[] {
+    if (!this.root) return output
+
+    queue.push(this.root)
+
+    while (queue.length) {
+      const currentNode = queue.shift()!
+      output.push(currentNode.data)
+
+      if (currentNode.left) {
+        queue.push(currentNode.left)
+      }
+
+      if (currentNode.right) {
+        queue.push(currentNode.right)
+      }
+    }
+
+    return output
+  }
+
+  public levelOrderTraversal(method: "recursion" | "iteration") {
+    const queue: Node[] = []
+    const output: number[] = []
+
+    return method === "iteration"
+      ? this.#levelOrderTraversalIterative(queue, output)
+      : this.#levelOrderTraversalRecursivly(queue, output)
   }
 }
