@@ -3,7 +3,9 @@ import { Node } from "./node.ts"
 
 interface BinaryTreeInterface {
   prettyPrint: (node: Node, prefix: string, isLeft: boolean) => void
-  insertValue: (value: number) => Node | null
+  insert: (value: number, currentRoot: Node) => Node | null
+  // delete: (value: number, currentRoot: Node) => Node | null
+  find: (value: number) => Node | null
 }
 
 export class BalancedBinaryTree
@@ -20,14 +22,6 @@ export class BalancedBinaryTree
     start = 0,
     end = array.length - 1
   ): Node | null {
-    /*
-    init start = 0, end = arr.length -1, mid = start + end / 2
-    create new node with data set at mid
-    recursively do following steps:
-      calculate mid of left subarray and set new node data at mid
-      calculate mid of right subarray and set new node data at mid
-      end when the start is > end
-    */
     if (start > end) return null
     const mid = Math.floor((start + end) / 2)
     const node = new Node(array[mid])
@@ -55,16 +49,34 @@ export class BalancedBinaryTree
     }
   }
 
-  public insertValue(value: number, currentRoot = this.root) {
+  public insert(value: number, currentRoot = this.root) {
     if (!value) return this.root
     if (!currentRoot) return new Node(value)
 
     if (value < currentRoot.data) {
-      currentRoot.left = this.insertValue(value, currentRoot.left)
+      currentRoot.left = this.insert(value, currentRoot.left)
     } else if (value > currentRoot.data) {
-      currentRoot.right = this.insertValue(value, currentRoot.right)
+      currentRoot.right = this.insert(value, currentRoot.right)
     }
 
     return currentRoot
+  }
+
+  public find(value: number) {
+    if (!this.root) return null
+
+    let temp: Node | null = this.root
+
+    while (temp) {
+      if (temp.data === value) {
+        return temp
+      } else if (value < temp.data) {
+        temp = temp.left
+      } else if (value > temp.data) {
+        temp = temp.right
+      }
+    }
+
+    return null
   }
 }
