@@ -256,16 +256,24 @@ export class BalancedBinaryTree
     return this.#calculateHeight(node)
   }
 
-  public isBalanced() {
+  public isBalanced(): boolean {
     if (!this.root) return false
-    const leftSubtree = this.#calculateHeight(this.root.left)
-    const rightSubtree = this.#calculateHeight(this.root.right)
 
-    return (
-      leftSubtree === rightSubtree ||
-      leftSubtree + 1 === rightSubtree ||
-      rightSubtree + 1 === leftSubtree
-    )
+    const checkBalance = (node: Node | null): number => {
+      if (!node) return 0
+
+      const leftHeight = checkBalance(node.left)
+      if (leftHeight === -1) return -1
+
+      const rightHeight = checkBalance(node.right)
+      if (rightHeight === -1) return -1
+
+      if (Math.abs(leftHeight - rightHeight) > 1) return -1
+
+      return Math.max(leftHeight, rightHeight) + 1
+    }
+
+    return checkBalance(this.root) !== -1
   }
 
   public reBalance() {
