@@ -1,10 +1,10 @@
-import { BalancedBinaryTree } from "./OOP/tree.ts"
+function generateUniqueNumbers(count: number, max: number) {
+  const numbers = new Set()
+  while (numbers.size < count) {
+    numbers.add(Math.floor(Math.random() * max) + 1)
+  }
+  return Array.from(numbers)
+}
 
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-const bst = new BalancedBinaryTree(arr)
-
-bst.prettyPrint(bst.getRoot()!)
-bst.insert(10)
-bst.insert(11)
-bst.reBalance()
-bst.prettyPrint(bst.getRoot()!)
+const uniqueNumbers = generateUniqueNumbers(100, 200)
+console.log(uniqueNumbers)
