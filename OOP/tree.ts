@@ -8,6 +8,8 @@ interface BinaryTreeInterface {
   find: (value: number) => Node | null
   levelOrderTraversal: (method: "recursion" | "iteration") => number[]
   depthFirstTraversal: (order: "pre" | "in" | "post") => number[]
+  height: (value: number) => number | null
+  depth: (value: number) => number | null
 }
 
 export class BalancedBinaryTree
@@ -168,9 +170,26 @@ export class BalancedBinaryTree
 
     return output
   }
+
   public depthFirstTraversal(order: "pre" | "in" | "post") {
     if (!this.root) return []
     const output: number[] = []
     return this.#traverse(order, this.root!, output)
+  }
+
+  public depth(value: number) {
+    if (!this.root) return null
+
+    let temp: Node | null = this.root
+    let internalClock = 0
+
+    while (temp) {
+      if (value === temp.data) return internalClock
+
+      temp = value < temp.data ? temp.left : temp.right
+      internalClock++
+    }
+
+    return null
   }
 }
