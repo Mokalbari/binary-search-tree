@@ -8,8 +8,8 @@ interface BinaryTreeInterface {
   find: (value: number) => Node | null
   levelOrderTraversal: (method: "recursion" | "iteration") => number[]
   depthFirstTraversal: (order: "pre" | "in" | "post") => number[]
-  height: (value: number) => number | null
-  depth: (value: number) => number | null
+  height: (value: number) => number
+  depth: (value: number) => number
 }
 
 export class BalancedBinaryTree
@@ -178,7 +178,7 @@ export class BalancedBinaryTree
   }
 
   public depth(value: number) {
-    if (!this.root) return null
+    if (!this.root) return -1
 
     let temp: Node | null = this.root
     let internalClock = 0
@@ -190,6 +190,22 @@ export class BalancedBinaryTree
       internalClock++
     }
 
-    return null
+    return -1
+  }
+
+  #calculateHeight(node: Node | null): number {
+    if (!node) return -1
+
+    const leftHeight = this.#calculateHeight(node.left)
+    const rightHeight = this.#calculateHeight(node.right)
+
+    return Math.max(leftHeight, rightHeight) + 1
+  }
+
+  public height(value: number): number {
+    const node = this.find(value)
+    if (!node) return -1
+
+    return this.#calculateHeight(node)
   }
 }
