@@ -11,6 +11,7 @@ interface BinaryTreeInterface {
   height: (value: number) => number
   depth: (value: number) => number
   isBalanced: () => boolean
+  reBalance: () => Node | null
 }
 
 export class BalancedBinaryTree
@@ -255,7 +256,7 @@ export class BalancedBinaryTree
     return this.#calculateHeight(node)
   }
 
-  public isBalanced(): boolean {
+  public isBalanced() {
     if (!this.root) return false
     const leftSubtree = this.#calculateHeight(this.root.left)
     const rightSubtree = this.#calculateHeight(this.root.right)
@@ -265,5 +266,13 @@ export class BalancedBinaryTree
       leftSubtree + 1 === rightSubtree ||
       rightSubtree + 1 === leftSubtree
     )
+  }
+
+  public reBalance() {
+    if (this.isBalanced()) return null
+
+    const inOrderArray = this.depthFirstTraversal("in")
+    this.buildTree(inOrderArray)
+    return this.root
   }
 }
