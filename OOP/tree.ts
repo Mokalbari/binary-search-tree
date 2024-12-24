@@ -66,10 +66,14 @@ export class BalancedBinaryTree
     return currentRoot
   }
 
-  public delete(value: number): void {
-    this.root = this.#deleteNode(this.root, value)
+  #findSucessor(node: Node): number {
+    let minValue = node.data
+    while (node.left) {
+      minValue = node.left.data
+      node = node.left
+    }
+    return minValue
   }
-
   #deleteNode(root: Node | null, value: number): Node | null {
     // Base case: empty tree or value not found
     if (!root) return null
@@ -103,13 +107,8 @@ export class BalancedBinaryTree
     return root
   }
 
-  #findSucessor(node: Node): number {
-    let minValue = node.data
-    while (node.left) {
-      minValue = node.left.data
-      node = node.left
-    }
-    return minValue
+  public delete(value: number): void {
+    this.root = this.#deleteNode(this.root, value)
   }
 
   public find(value: number) {
@@ -253,5 +252,17 @@ export class BalancedBinaryTree
     if (!node) return -1
 
     return this.#calculateHeight(node)
+  }
+
+  public isBalanced(node: Node | null): boolean {
+    if (!node) return false
+    const leftSubtree = this.#calculateHeight(node.left)
+    const rightSubtree = this.#calculateHeight(node.right)
+
+    return (
+      leftSubtree === rightSubtree ||
+      leftSubtree + 1 === rightSubtree ||
+      rightSubtree + 1 === leftSubtree
+    )
   }
 }
