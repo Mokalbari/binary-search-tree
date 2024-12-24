@@ -4,7 +4,7 @@ import { Node } from "./node.ts"
 interface BinaryTreeInterface {
   prettyPrint: (node: Node, prefix: string, isLeft: boolean) => void
   insert: (value: number, currentRoot: Node) => Node | null
-  // delete: (value: number, currentRoot: Node) => Node | null
+  delete: (value: number) => void
   find: (value: number) => Node | null
   levelOrderTraversal: (method: "recursion" | "iteration") => number[]
   depthFirstTraversal: (order: "pre" | "in" | "post") => number[]
@@ -64,6 +64,52 @@ export class BalancedBinaryTree
     }
 
     return currentRoot
+  }
+
+  public delete(value: number): void {
+    this.root = this.#deleteNode(this.root, value)
+  }
+
+  #deleteNode(root: Node | null, value: number): Node | null {
+    // Base case: empty tree or value not found
+    if (!root) return null
+
+    // Recursively search for the node to delete
+    if (value < root.data) {
+      root.left = this.#deleteNode(root.left, value)
+      return root
+    }
+    if (value > root.data) {
+      root.right = this.#deleteNode(root.right, value)
+      return root
+    }
+
+    // Node found, handle the three cases
+    // Case 1: Node has no children (leaf node)
+    if (!root.left && !root.right) {
+      return null
+    }
+
+    // Case 2: Node has only one child
+    if (!root.left) return root.right
+    if (!root.right) return root.left
+
+    // Case 3: Node has two children
+    // Find the smallest value in the right subtree (successor)
+    root.data = this.#findSucessor(root.right)
+    // Delete the successor
+    root.right = this.#deleteNode(root.right, root.data)
+
+    return root
+  }
+
+  #findSucessor(node: Node): number {
+    let minValue = node.data
+    while (node.left) {
+      minValue = node.left.data
+      node = node.left
+    }
+    return minValue
   }
 
   public find(value: number) {
